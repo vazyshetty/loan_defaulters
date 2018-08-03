@@ -1,0 +1,21 @@
+# R Version 3.4.0
+# reading the file from zipped format
+
+ccdata <- data.table::fread("gzip -dc 'default of credit card clients.csv.gz'")
+names(ccdata)
+
+# checking correlations
+corrplot::corrplot(cor(ccdata[,c(1,13:24)]), method="number", type="upper")
+
+
+set.seed(111)
+library(caret)
+dt_mod <- createDataPartition(y = ccdp$Defaulted, p=.70, list=F)
+
+cc_train_dt <- ccdp[dt_mod,]
+table(cc_train_dt$Defaulted)
+cc_test_dt  <- ccdp[-dt_mod,]
+table(cc_test_dt$Defaulted)
+
+cc_train_dt$Defaulted <- as.factor(cc_train_dt$Defaulted)
+cc_test_dt$Defaulted <- as.factor(cc_test_dt$Defaulted)
